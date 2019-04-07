@@ -12,11 +12,24 @@ import java.util.List;
 @RestController("/RPI")
 public class RpiController {
 
-    @Autowired
     //private RelayOne relayOne;
-    private RelayTwo relayTwo;
+    private final RelayTwo relayTwo;
 
-    @GetMapping(value = "/set/{state}")
+    @Autowired
+    public RpiController(RelayTwo relayTwo) {
+        this.relayTwo = relayTwo;
+    }
+
+    @GetMapping
+    @ResponseBody
+    public List<String>getRootPage(){
+        ArrayList<String> objects = new ArrayList<>();
+        objects.add(System.getProperty("os.name"));
+        return objects;
+    }
+
+    @GetMapping("/set/{stateNum}")
+    @ResponseBody
     public List<String> setDataFromRpi(@PathVariable int stateNum) {
         RelayState state=stateNum==0?RelayState.CLOSED:RelayState.OPEN;
         List<String> responce = new ArrayList<>();
@@ -28,7 +41,7 @@ public class RpiController {
 
     }
 
-    @GetMapping(value = "/getState")
+    @GetMapping("/getState")
     public RelayState getStateRelay() {
         return relayTwo.getState();
     }
