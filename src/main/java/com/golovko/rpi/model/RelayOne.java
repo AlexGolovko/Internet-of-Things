@@ -9,12 +9,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RelayOne {
-    private  Console console=new Console() ;
+
+
+
+
+    private Console console = new Console();
+
     public void doSmth() {
         GpioUtil.enableNonPrivilegedAccess();
         System.out.println("All LED's on Relay will turn ON..");
         final GpioController gpioRelayLED1 = GpioFactory.getInstance();
-        GpioPinDigitalOutput relayLED1 = gpioRelayLED1.provisionDigitalOutputPin(RaspiPin.GPIO_00, "RelayLED1", PinState.HIGH); //OFF
+        GpioPinDigitalOutput relayLED1 = gpioRelayLED1.provisionDigitalOutputPin(RaspiPin.GPIO_01, "RelayLED1", PinState.HIGH); //OFF
 
         for (int i = 0; i < 20; i++) {
             console.print("ON");
@@ -24,7 +29,6 @@ public class RelayOne {
             relayLED1.high();//OFF
             introduceDelay(1000);
         }
-
     }
 
     /**
