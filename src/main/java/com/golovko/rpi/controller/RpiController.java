@@ -5,6 +5,7 @@ import com.golovko.rpi.model.RelayTwo;
 import com.pi4j.component.relay.RelayState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class RpiController {
         this.relayTwo = relayTwo;
     }
 
-    @GetMapping
+    @GetMapping("/")
     @ResponseBody
     public List<String>getRootPage(){
         ArrayList<String> objects = new ArrayList<>();
