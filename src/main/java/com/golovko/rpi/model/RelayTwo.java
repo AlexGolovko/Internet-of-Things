@@ -2,7 +2,9 @@ package com.golovko.rpi.model;
 
 import com.pi4j.component.relay.RelayBase;
 import com.pi4j.component.relay.RelayState;
+import com.pi4j.component.relay.impl.GpioRelayComponent;
 import com.pi4j.io.gpio.*;
+import com.pi4j.io.gpio.impl.GpioPinImpl;
 import com.pi4j.util.Console;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,7 +24,12 @@ public class RelayTwo extends RelayBase {
             e.printStackTrace();
         }
     }
+    {
 
+        GpioPinImpl gpioPin = new GpioPinImpl(GpioFactory.getInstance(), GpioFactory.getDefaultProvider(), RaspiPin.GPIO_01);
+        GpioRelayComponent gpioRelayComponent=new GpioRelayComponent(gpioPin,PinState.HIGH,PinState.LOW);
+
+    }
     private GpioController gpioRelayLED;
     private GpioPinDigitalOutput relayLED1;
 

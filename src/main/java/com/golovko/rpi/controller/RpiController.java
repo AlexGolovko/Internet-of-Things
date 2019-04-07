@@ -3,6 +3,11 @@ package com.golovko.rpi.controller;
 import com.golovko.rpi.model.RelayOne;
 import com.golovko.rpi.model.RelayTwo;
 import com.pi4j.component.relay.RelayState;
+import com.pi4j.component.relay.impl.GpioRelayComponent;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.gpio.impl.GpioPinImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
@@ -29,15 +34,25 @@ public class RpiController {
         return objects;
     }
 
-    @GetMapping("/set/{stateNum}")
+    @GetMapping("RPI/set/{stateNum}")
     @ResponseBody
     public List<String> setDataFromRpi(@PathVariable int stateNum) {
-        RelayState state=stateNum==0?RelayState.CLOSED:RelayState.OPEN;
         List<String> responce = new ArrayList<>();
+
+        //
+        GpioPinImpl gpioPin = new GpioPinImpl(GpioFactory.getInstance(), GpioFactory.getDefaultProvider(), RaspiPin.GPIO_01);
+        GpioRelayComponent gpioRelay=new GpioRelayComponent(gpioPin, PinState.HIGH,PinState.LOW);
+        responce.add(gpioPin.getState().getName()+"==="+gpioPin.getState().getValue());
+        responce.add(gpioRelay.getState().name());
+        gpioRelay.setState(RelayState.getInverseState(gpioRelay.getState()));
+        responce.add(gpioRelay.getState().name());
+        //
+
+        /*RelayState state=stateNum==0?RelayState.CLOSED:RelayState.OPEN;
         responce.add(state.name());
         responce.add("create Rela(y instance");
         relayTwo.setState(state);
-        responce.add("do Smth");
+        responce.add("do Smth");*/
         return responce;
 
     }
