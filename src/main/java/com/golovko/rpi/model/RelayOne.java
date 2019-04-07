@@ -8,9 +8,7 @@ import com.pi4j.wiringpi.GpioUtil;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RelayOne {
-
-
+public class RelayOne  {
 
 
     private Console console = new Console();
@@ -19,6 +17,7 @@ public class RelayOne {
         GpioUtil.enableNonPrivilegedAccess();
         System.out.println("All LED's on Relay will turn ON..");
         final GpioController gpioRelayLED1 = GpioFactory.getInstance();
+
         GpioPinDigitalOutput relayLED1 = gpioRelayLED1.provisionDigitalOutputPin(RaspiPin.GPIO_01, "RelayLED1", PinState.HIGH); //OFF
 
         for (int i = 0; i < 20; i++) {
