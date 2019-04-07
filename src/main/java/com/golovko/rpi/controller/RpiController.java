@@ -1,5 +1,6 @@
 package com.golovko.rpi.controller;
 
+import com.golovko.rpi.model.RainDetector;
 import com.golovko.rpi.model.RelayOne;
 import com.golovko.rpi.model.RelayTwo;
 import com.pi4j.component.relay.RelayState;
@@ -20,15 +21,17 @@ public class RpiController {
 
     //private RelayOne relayOne;
     private final RelayTwo relayTwo;
+    private final RainDetector rainDetector;
 
     @Autowired
-    public RpiController(RelayTwo relayTwo) {
+    public RpiController(RelayTwo relayTwo, RainDetector rainDetector) {
         this.relayTwo = relayTwo;
+        this.rainDetector = rainDetector;
     }
 
     @GetMapping("/")
     @ResponseBody
-    public List<String>getRootPage(){
+    public List<String> getRootPage() {
         ArrayList<String> objects = new ArrayList<>();
         objects.add(System.getProperty("os.name"));
         return objects;
@@ -39,12 +42,14 @@ public class RpiController {
     public List<String> setDataFromRpi(@PathVariable int stateNum) {
         List<String> responce = new ArrayList<>();
 
+
         //
         GpioPinImpl gpioPin = new GpioPinImpl(GpioFactory.getInstance(), GpioFactory.getDefaultProvider(), RaspiPin.GPIO_01);
-        GpioRelayComponent gpioRelay=new GpioRelayComponent(gpioPin, PinState.HIGH,PinState.LOW);
-        responce.add(gpioPin.getState().getName()+"==="+gpioPin.getState().getValue());
+        GpioRelayComponent gpioRelay = new GpioRelayComponent(gpioPin, PinState.HIGH, PinState.LOW);
+        responce.add(gpioPin.getState().getName() + "===" + gpioPin.getState().getValue());
         responce.add(gpioRelay.getState().name());
         gpioRelay.setState(RelayState.getInverseState(gpioRelay.getState()));
+
         responce.add(gpioRelay.getState().name());
         //
 
@@ -60,5 +65,10 @@ public class RpiController {
     @GetMapping("/getState")
     public RelayState getStateRelay() {
         return relayTwo.getState();
+    }
+
+    @GetMapping("/getRainState")
+    public String getRainState() {
+        return rainDetector.getState().toString();
     }
 }
