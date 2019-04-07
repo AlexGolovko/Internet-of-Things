@@ -17,7 +17,8 @@ public class RpiController {
     private RelayTwo relayTwo;
 
     @GetMapping(value = "/set/{state}")
-    public List<String> setDataFromRpi(@PathVariable RelayState state) {
+    public List<String> setDataFromRpi(@PathVariable int stateNum) {
+        RelayState state=stateNum==0?RelayState.CLOSED:RelayState.OPEN;
         List<String> responce = new ArrayList<>();
         responce.add(state.name());
         responce.add("create Rela(y instance");
