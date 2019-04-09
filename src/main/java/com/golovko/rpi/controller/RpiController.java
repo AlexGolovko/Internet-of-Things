@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.LogManager;
 
-@RestController(value = "/RPI")
+@RestController
 public class RpiController {
 
     //private RelayOne relayOne;
@@ -67,13 +67,13 @@ public class RpiController {
 
     }
 
-    @GetMapping(value = "/getState")
+    @GetMapping(value = "RPI/getState")
     public RelayState getStateRelay() {
         logger.trace(relayTwo.getState());
         return relayTwo.getState();
     }
 
-    @GetMapping(value = "/getRainState")
+    @GetMapping(value = "RPI/getRainState")
     public String getRainState() {
         logger.trace(rainDetector.getState());
         return rainDetector.getState().toString();
