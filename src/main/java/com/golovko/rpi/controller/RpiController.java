@@ -10,28 +10,31 @@ import com.pi4j.io.gpio.GpioPinDigitalInput;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.gpio.impl.GpioPinImpl;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.LogManager;
 
-@RestController("/RPI")
+@RestController(value = "/RPI")
 public class RpiController {
 
     //private RelayOne relayOne;
     private final RelayTwo relayTwo;
-    private  RainDetector rainDetector;
+    private RainDetector rainDetector;
+    private final Logger logger=Logger.getLogger(this.getClass());
 
     @Autowired
     public RpiController(RelayTwo relayTwo) {
         this.relayTwo = relayTwo;
         GpioPinDigitalInput input = new GpioPinImpl(GpioFactory.getInstance(), GpioFactory.getDefaultProvider(), RaspiPin.GPIO_00);
-        rainDetector=new RainDetector(input);
+        rainDetector = new RainDetector(input);
     }
 
-    @GetMapping("/")
+    @GetMapping(value = "/")
     @ResponseBody
     public List<String> getRootPage() {
         ArrayList<String> objects = new ArrayList<>();
@@ -39,7 +42,7 @@ public class RpiController {
         return objects;
     }
 
-    @GetMapping("RPI/set/{stateNum}")
+    @GetMapping(value = "RPI/set/{stateNum}")
     @ResponseBody
     public List<String> setDataFromRpi(@PathVariable int stateNum) {
         List<String> responce = new ArrayList<>();
@@ -64,13 +67,15 @@ public class RpiController {
 
     }
 
-    @GetMapping("/getState")
+    @GetMapping(value = "/getState")
     public RelayState getStateRelay() {
+        logger.trace(relayTwo.getState());
         return relayTwo.getState();
     }
 
-    @GetMapping("/getRainState")
+    @GetMapping(value = "/getRainState")
     public String getRainState() {
+        logger.trace(rainDetector.getState());
         return rainDetector.getState().toString();
     }
 }
