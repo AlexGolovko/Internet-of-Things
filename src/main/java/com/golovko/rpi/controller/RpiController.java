@@ -6,6 +6,7 @@ import com.golovko.rpi.model.RelayTwo;
 import com.pi4j.component.relay.RelayState;
 import com.pi4j.component.relay.impl.GpioRelayComponent;
 import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalInput;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.gpio.impl.GpioPinImpl;
@@ -21,12 +22,13 @@ public class RpiController {
 
     //private RelayOne relayOne;
     private final RelayTwo relayTwo;
-    private final RainDetector rainDetector;
+    private  RainDetector rainDetector;
 
     @Autowired
-    public RpiController(RelayTwo relayTwo, RainDetector rainDetector) {
+    public RpiController(RelayTwo relayTwo) {
         this.relayTwo = relayTwo;
-        this.rainDetector = rainDetector;
+        GpioPinDigitalInput input = new GpioPinImpl(GpioFactory.getInstance(), GpioFactory.getDefaultProvider(), RaspiPin.GPIO_00);
+        rainDetector=new RainDetector(input);
     }
 
     @GetMapping("/")
