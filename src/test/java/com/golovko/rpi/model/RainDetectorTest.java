@@ -1,14 +1,8 @@
 package com.golovko.rpi.model;
 
 import com.pi4j.component.sensor.impl.GpioSensorComponent;
-import com.pi4j.io.gpio.*;
-import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
-import com.pi4j.io.gpio.event.GpioPinListenerDigital;
-import com.pi4j.io.gpio.impl.GpioPinImpl;
-import org.junit.Before;
+import com.pi4j.io.gpio.RaspiPin;
 import org.junit.Test;
-
-import static org.junit.Assert.assertNotNull;
 
 public class RainDetectorTest {
     private RainDetector rainDetector;
@@ -43,6 +37,18 @@ public class RainDetectorTest {
     }*/
 
     @Test
+    public void RainTest() {
+        rainDetector = new RainDetector(RaspiPin.GPIO_00);
+        System.out.println(rainDetector.getState());
+        System.out.println(rainDetector.isClosed());
+        System.out.println(rainDetector.isOpen());
+        rainDetector.addListener(event -> {
+            System.out.println(" --> GPIO PIN STATE CHANGE: " + event.getNewState());
+        });
+
+
+    }
+    /*@Test
     public void testing(){
 
             System.out.println("<--Pi4J--> GPIO Listen Example ... started.");
@@ -57,19 +63,15 @@ public class RainDetectorTest {
             myButton.setShutdownOptions(true);
 
             // create and register gpio pin listener
-            myButton.addListener(new GpioPinListenerDigital() {
-                @Override
-                public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-                    // display pin state on console
-                    System.out.println(" --> GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState());
-                }
-
+            myButton.addListener((GpioPinListenerDigital) event -> {
+                // display pin state on console
+                System.out.println(" --> GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState());
             });
 
-            System.out.println(" ... complete the GPIO #02 circuit and see the listener feedback here in the console.");
+            System.out.println(" ... complete the GPIO #02 circuit and see the listener feedback here in the console.");*/
 
-            // keep program running until user aborts (CTRL-C)
-        try {
+    // keep program running until user aborts (CTRL-C)
+        /*try {
             while(true) {
 
                     Thread.sleep(500);
@@ -77,11 +79,11 @@ public class RainDetectorTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+          }*/
 
-            // stop all GPIO activity/threads by shutting down the GPIO controller
-            // (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
-            // gpio.shutdown();   <--- implement this method call if you wish to terminate the Pi4J GPIO controller
+    // stop all GPIO activity/threads by shutting down the GPIO controller
+    // (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
+    // gpio.shutdown();   <--- implement this method call if you wish to terminate the Pi4J GPIO controller
 
-    }
 
 }

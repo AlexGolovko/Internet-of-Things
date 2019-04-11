@@ -1,28 +1,37 @@
 package com.golovko.rpi.model;
 
-import com.pi4j.component.sensor.AnalogSensor;
+import com.pi4j.component.sensor.Sensor;
 import com.pi4j.component.sensor.SensorBase;
 import com.pi4j.component.sensor.SensorState;
-import com.pi4j.component.sensor.impl.AnalogSensorComponent;
-import com.pi4j.component.sensor.impl.GpioSensorComponent;
-import com.pi4j.io.gpio.*;
-import com.pi4j.io.gpio.impl.GpioPinImpl;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalInput;
+import com.pi4j.io.gpio.Pin;
+import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 @Data
 @ToString
-public class RainDetector extends GpioSensorComponent {
+public class RainDetector extends SensorBase {
+    private Sensor sensor;
+    GpioPinDigitalInput sensorInput;
 
-   // GpioPinDigitalInput input;
+    public RainDetector(Pin pin) {
+         sensorInput = GpioFactory.getInstance().provisionDigitalInputPin(pin);
 
-    public RainDetector(GpioPinDigitalInput pin) {
-        super(pin);
     }
+
+    @Override
+    public SensorState getState() {
+        return sensorInput.isHigh() ? SensorState.CLOSED : SensorState.OPEN;
+    }
+
+
+    // GpioPinDigitalInput input;
+
+    /*public RainDetector(GpioPinDigitalInput pin) {
+        super(pin);
+    }*/
 
 
     //private GpioSensorComponent gpioSensorComponent;
