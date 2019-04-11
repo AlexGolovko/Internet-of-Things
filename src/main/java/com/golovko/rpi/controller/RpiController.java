@@ -10,6 +10,7 @@ import com.pi4j.io.gpio.GpioPinDigitalInput;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.gpio.impl.GpioPinImpl;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -75,7 +76,14 @@ public class RpiController {
 
     @GetMapping(value = "/getRainState")
     public String getRainState() {
-        logger.trace(rainDetector.getState());
+        System.out.println("Request"+System.currentTimeMillis());
+        logger.setLevel(Level.ALL);
+        logger.error(rainDetector);
+        System.out.println(rainDetector);
+        System.out.println(rainDetector.getName());
+        System.out.println(rainDetector.isClosed());
+        System.out.println(rainDetector.isClosed());
+        System.out.println(rainDetector.getProperties());
         return rainDetector.getState().toString();
     }
 }

@@ -9,11 +9,13 @@ import com.pi4j.io.gpio.*;
 import com.pi4j.io.gpio.impl.GpioPinImpl;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-
+@Data
+@ToString
 public class RainDetector extends GpioSensorComponent {
 
    // GpioPinDigitalInput input;
@@ -21,6 +23,7 @@ public class RainDetector extends GpioSensorComponent {
     public RainDetector(GpioPinDigitalInput pin) {
         super(pin);
     }
+
 
     //private GpioSensorComponent gpioSensorComponent;
 
@@ -43,4 +46,6 @@ public class RainDetector extends GpioSensorComponent {
 
 
     }*/
+
+
 }

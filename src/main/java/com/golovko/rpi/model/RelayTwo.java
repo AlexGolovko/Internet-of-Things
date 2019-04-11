@@ -6,7 +6,6 @@ import com.pi4j.component.relay.impl.GpioRelayComponent;
 import com.pi4j.io.gpio.*;
 import com.pi4j.io.gpio.impl.GpioPinImpl;
 import com.pi4j.util.Console;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -17,19 +16,21 @@ public class RelayTwo extends RelayBase {
 
     @PostConstruct
     private void init() {
-        try{
-        gpioRelayLED = GpioFactory.getInstance();
-        relayLED1 = gpioRelayLED.provisionDigitalOutputPin(RaspiPin.GPIO_01, "RelayLED1", PinState.HIGH);}
-        catch (Exception e){
+        try {
+            gpioRelayLED = GpioFactory.getInstance();
+            relayLED1 = gpioRelayLED.provisionDigitalOutputPin(RaspiPin.GPIO_01, "RelayLED1", PinState.HIGH);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    {
+
+   /* {
 
         GpioPinImpl gpioPin = new GpioPinImpl(GpioFactory.getInstance(), GpioFactory.getDefaultProvider(), RaspiPin.GPIO_01);
-        GpioRelayComponent gpioRelayComponent=new GpioRelayComponent(gpioPin,PinState.HIGH,PinState.LOW);
+        GpioRelayComponent gpioRelayComponent = new GpioRelayComponent(gpioPin, PinState.HIGH, PinState.LOW);
 
-    }
+    }*/
+
     private GpioController gpioRelayLED;
     private GpioPinDigitalOutput relayLED1;
 
