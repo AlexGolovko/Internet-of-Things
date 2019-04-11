@@ -5,11 +5,10 @@ import com.golovko.rpi.model.RelayOne;
 import com.golovko.rpi.model.RelayTwo;
 import com.pi4j.component.relay.RelayState;
 import com.pi4j.component.relay.impl.GpioRelayComponent;
-import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.GpioPinDigitalInput;
-import com.pi4j.io.gpio.PinState;
-import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.gpio.*;
 import com.pi4j.io.gpio.impl.GpioPinImpl;
+import com.pi4j.io.gpio.impl.PinImpl;
+import com.pi4j.wiringpi.Gpio;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +30,10 @@ public class RpiController {
     @Autowired
     public RpiController(RelayTwo relayTwo) {
         this.relayTwo = relayTwo;
-        //GpioPinDigitalInput input = new GpioPinImpl(GpioFactory.getInstance(), GpioFactory.getDefaultProvider(), RaspiPin.GPIO_00);
+        GpioPinDigitalInput input = new GpioPinImpl(GpioFactory.getInstance(), GpioFactory.getDefaultProvider(), RaspiPin.GPIO_00);
         rainDetector = new RainDetector(GpioFactory.getInstance().provisionDigitalInputPin(RaspiPin.GPIO_00));
+       // rainDetector=new RainDetector(GpioFactory.getInstance())
+        GpioPin provisionedPin = GpioFactory.getInstance().getProvisionedPin(RaspiPin.GPIO_00);
     }
 
     @GetMapping(value = "/")
