@@ -31,8 +31,8 @@ public class RpiController {
     @Autowired
     public RpiController(RelayTwo relayTwo) {
         this.relayTwo = relayTwo;
-        GpioPinDigitalInput input = new GpioPinImpl(GpioFactory.getInstance(), GpioFactory.getDefaultProvider(), RaspiPin.GPIO_00);
-        rainDetector = new RainDetector(input);
+        //GpioPinDigitalInput input = new GpioPinImpl(GpioFactory.getInstance(), GpioFactory.getDefaultProvider(), RaspiPin.GPIO_00);
+        rainDetector = new RainDetector(GpioFactory.getInstance().provisionDigitalInputPin(RaspiPin.GPIO_00));
     }
 
     @GetMapping(value = "/")
