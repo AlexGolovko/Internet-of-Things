@@ -31,8 +31,8 @@ public class RpiController {
     public RpiController(RelayTwo relayTwo) {
         this.relayTwo = relayTwo;
         GpioPinDigitalInput input = new GpioPinImpl(GpioFactory.getInstance(), GpioFactory.getDefaultProvider(), RaspiPin.GPIO_00);
-        rainDetector = new RainDetector(GpioFactory.getInstance().provisionDigitalInputPin(RaspiPin.GPIO_00));
-       // rainDetector=new RainDetector(GpioFactory.getInstance())
+       // rainDetector = new RainDetector(GpioFactory.getInstance().provisionDigitalInputPin(RaspiPin.GPIO_00));
+        rainDetector=new RainDetector(RaspiPin.GPIO_00);
         GpioPin provisionedPin = GpioFactory.getInstance().getProvisionedPin(RaspiPin.GPIO_00);
     }
 
@@ -77,14 +77,14 @@ public class RpiController {
 
     @GetMapping(value = "RPI/getRainState")
     public String getRainState() {
-        System.out.println("Request"+System.currentTimeMillis());
+        System.err.println("Request"+System.currentTimeMillis());
         logger.setLevel(Level.ALL);
         logger.error(rainDetector);
-        System.out.println(rainDetector);
-        System.out.println(rainDetector.getName());
-        System.out.println(rainDetector.isClosed());
-        System.out.println(rainDetector.isClosed());
-        System.out.println(rainDetector.getProperties());
+        System.err.println(rainDetector);
+        System.err.println(rainDetector.getName());
+        System.err.println(rainDetector.isClosed());
+        System.err.println(rainDetector.isClosed());
+        System.err.println(rainDetector.getProperties());
         return rainDetector.getState().toString();
     }
 }
