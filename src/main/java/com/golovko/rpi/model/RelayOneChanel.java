@@ -6,6 +6,7 @@ import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.PinState;
+import com.pi4j.wiringpi.Gpio;
 import lombok.Data;
 
 @Data
@@ -13,9 +14,9 @@ public class RelayOneChanel extends RelayBase {
     private RelayState relayState;
     private GpioPinDigitalOutput relay;
 
+
     RelayOneChanel(Pin pin, String name, PinState pinState) {
         relay = GpioFactory.getInstance().provisionDigitalOutputPin(pin, name, pinState);
-
     }
 
     @Override
@@ -26,6 +27,7 @@ public class RelayOneChanel extends RelayBase {
 
     @Override
     public void setState(RelayState relayState) {
+        relay.setState(relayState==RelayState.OPEN?PinState.LOW:PinState.HIGH);
         this.relayState = relayState;
     }
 

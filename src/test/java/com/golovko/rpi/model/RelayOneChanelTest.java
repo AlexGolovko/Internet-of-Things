@@ -8,18 +8,25 @@ import com.pi4j.io.gpio.RaspiPin;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class RelayOneChanelTest {
 
+    private Logger logger=Logger.getLogger(RelayOneChanelTest.class.getName());
     private RelayOneChanel relay;
     private final Pin relayPin = RaspiPin.GPIO_01;
 
     @Before
     public void setUp() throws Exception {
+        logger.setLevel(Level.INFO);
+        logger.info("RELAY==NULL= "+String.valueOf(relay==null));
         if (relay == null) {
             relay = RelayFactory.getInstanceOneChanellRelay(relayPin, "Relay", PinState.HIGH);
+            logger.info(relay.toString());
         }
         assertNotNull(relay);
     }
