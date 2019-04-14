@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class RelayOneChanelTest {
 
@@ -17,7 +18,10 @@ public class RelayOneChanelTest {
 
     @Before
     public void setUp() throws Exception {
-        relay = RelayFactory.getInstanceOneChanellRelay(relayPin, "Relay", PinState.HIGH);
+        if (relay == null) {
+            relay = RelayFactory.getInstanceOneChanellRelay(relayPin, "Relay", PinState.HIGH);
+        }
+        assertNotNull(relay);
     }
 
     @Test
@@ -46,6 +50,6 @@ public class RelayOneChanelTest {
         RelayState relayStateAfter = relay.getState();
         PinState pinStateAfter = GpioFactory.getDefaultProvider().getState(relayPin);
         assertNotEquals(relayStateBefore, relayStateAfter);
-        assertNotEquals(pinStateBefore,pinStateAfter);
+        assertNotEquals(pinStateBefore, pinStateAfter);
     }
 }

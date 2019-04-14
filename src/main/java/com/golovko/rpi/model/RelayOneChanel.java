@@ -15,6 +15,7 @@ public class RelayOneChanel extends RelayBase {
 
     RelayOneChanel(Pin pin, String name, PinState pinState) {
         relay = GpioFactory.getInstance().provisionDigitalOutputPin(pin, name, pinState);
+
     }
 
     @Override

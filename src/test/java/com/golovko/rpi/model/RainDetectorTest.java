@@ -45,7 +45,9 @@ public class RainDetectorTest {
 
     @Before
     public void setUp() throws Exception {
-        rainDetector = new RainDetector(rainPin);
+        if (rainDetector == null) {
+            rainDetector = new RainDetector(rainPin);
+        }
         assertNotNull(rainDetector);
     }
 
