@@ -14,20 +14,18 @@ import java.util.logging.Logger;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class RelayOneChanelTest {
+public class RelayOneChannelTest {
 
-    private Logger logger=Logger.getLogger(RelayOneChanelTest.class.getName());
-    private RelayOneChanel relay;
+    private Logger logger = Logger.getLogger(RelayOneChannelTest.class.getName());
+    private RelayOneChannel relay;
     private final Pin relayPin = RaspiPin.GPIO_01;
 
     @Before
     public void setUp() throws Exception {
         logger.setLevel(Level.INFO);
-        logger.info("RELAY==NULL= "+String.valueOf(relay==null));
-        if (relay == null) {
-            relay = RelayFactory.getInstanceOneChanellRelay(relayPin, "Relay", PinState.HIGH);
-            logger.info(relay.toString());
-        }
+        logger.info("RELAY==NULL= " + String.valueOf(relay == null));
+        relay = RelayFactory.getInstanceOneChanellRelay(relayPin, "Relay", PinState.HIGH);
+
         assertNotNull(relay);
     }
 
@@ -43,6 +41,7 @@ public class RelayOneChanelTest {
 
         assertNotEquals(relayStateBefore, relayStateAfter);
         assertNotEquals(pinStateBefore, pinStateAfter);
+        relay.shutdownRelay();
         //RaspiGpioProvider raspiGpioProvider = new RaspiGpioProvider();
 
     }
@@ -58,5 +57,6 @@ public class RelayOneChanelTest {
         PinState pinStateAfter = GpioFactory.getDefaultProvider().getState(relayPin);
         assertNotEquals(relayStateBefore, relayStateAfter);
         assertNotEquals(pinStateBefore, pinStateAfter);
+        relay.shutdownRelay();
     }
 }
