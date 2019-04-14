@@ -1,12 +1,19 @@
 package com.golovko.rpi.model;
 
-import com.pi4j.component.sensor.impl.GpioSensorComponent;
+import com.pi4j.component.sensor.SensorState;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.Pin;
+import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
+import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
 
 public class RainDetectorTest {
     private RainDetector rainDetector;
-    private GpioSensorComponent component;
+    private final Pin rainPin = RaspiPin.GPIO_00;
+    //private GpioSensorComponent component;
 
     /*@Before
     public void setUp() throws Exception {
@@ -36,9 +43,19 @@ public class RainDetectorTest {
         System.out.println(component.getState());
     }*/
 
+    @Before
+    public void setUp() throws Exception {
+        rainDetector = new RainDetector(rainPin);
+        assertNotNull(rainDetector);
+    }
+
     @Test
-    public void RainTest() {
-        rainDetector = new RainDetector(RaspiPin.GPIO_00);
+    public void RainGetStateTest() {
+        SensorState rainDetectorState = rainDetector.getState();
+        PinState pinStateBefore = GpioFactory.getDefaultProvider().getState(rainPin);
+
+        assertNotNull(rainDetectorState);
+
         System.out.println(rainDetector.getState());
         System.out.println(rainDetector.isClosed());
         System.out.println(rainDetector.isOpen());

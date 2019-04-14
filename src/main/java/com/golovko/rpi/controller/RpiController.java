@@ -21,7 +21,7 @@ import java.util.logging.LogManager;
 
 @RestController
 public class RpiController {
-
+/*
     //private RelayOne relayOne;
     private final RelayTwo relayTwo;
     private RainDetector rainDetector;
@@ -32,7 +32,7 @@ public class RpiController {
         this.relayTwo = relayTwo;
         GpioPinDigitalInput input = new GpioPinImpl(GpioFactory.getInstance(), GpioFactory.getDefaultProvider(), RaspiPin.GPIO_00);
 
-        rainDetector=new RainDetector(RaspiPin.GPIO_00);
+        //rainDetector=new RainDetector(RaspiPin.GPIO_00);
         GpioPin provisionedPin = GpioFactory.getInstance().getProvisionedPin(RaspiPin.GPIO_00);
     }
 
@@ -60,11 +60,11 @@ public class RpiController {
         responce.add(gpioRelay.getState().name());
         //
 
-        /*RelayState state=stateNum==0?RelayState.CLOSED:RelayState.OPEN;
+        *//*RelayState state=stateNum==0?RelayState.CLOSED:RelayState.OPEN;
         responce.add(state.name());
         responce.add("create Rela(y instance");
         relayTwo.setState(state);
-        responce.add("do Smth");*/
+        responce.add("do Smth");*//*
         return responce;
 
     }
@@ -86,5 +86,5 @@ public class RpiController {
         System.err.println(rainDetector.isClosed());
         System.err.println(rainDetector.getProperties());
         return rainDetector.getState().toString();
-    }
+    }*/
 }

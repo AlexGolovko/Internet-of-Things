@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
+
 @Component
 public class RelayTwo extends RelayBase {
     private Console console = new Console();
@@ -17,6 +18,7 @@ public class RelayTwo extends RelayBase {
     @PostConstruct
     private void init() {
         try {
+
             gpioRelayLED = GpioFactory.getInstance();
             relayLED1 = gpioRelayLED.provisionDigitalOutputPin(RaspiPin.GPIO_01, "RelayLED1", PinState.HIGH);
         } catch (Exception e) {

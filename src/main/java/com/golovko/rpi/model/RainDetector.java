@@ -1,23 +1,29 @@
 package com.golovko.rpi.model;
 
-import com.pi4j.component.sensor.Sensor;
 import com.pi4j.component.sensor.SensorBase;
 import com.pi4j.component.sensor.SensorState;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalInput;
 import com.pi4j.io.gpio.Pin;
-import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import lombok.Data;
-import lombok.ToString;
 
 @Data
-@ToString
+/*@Component
+@Scope("prototype")*/
 public class RainDetector extends SensorBase {
-    private Sensor sensor;
-    GpioPinDigitalInput sensorInput;
+    ///private Sensor sensor;
+    private static GpioPinDigitalInput sensorInput;
+    //private RainDetector instance;
 
+
+    //    @PostConstruct
+//    public static RainDetector getInstance(Pin pin) {
+//
+//       sensorInput = GpioFactory.getInstance().provisionDigitalInputPin(pin);
+//       return new RainDetector();
+//    }
     public RainDetector(Pin pin) {
-         sensorInput = GpioFactory.getInstance().provisionDigitalInputPin(pin);
+        sensorInput = GpioFactory.getInstance().provisionDigitalInputPin(pin);
 
     }
 
