@@ -21,7 +21,7 @@ public class RelayOneChannelTest {
     private final Pin relayPin = RaspiPin.GPIO_01;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         logger.setLevel(Level.INFO);
         logger.info("RELAY==NULL= " + (relay == null));
         relay = RelayFactory.getInstanceOneChanellRelay(relayPin, "Relay", PinState.HIGH);
@@ -31,7 +31,7 @@ public class RelayOneChannelTest {
 
     @Test
     public void getState() {
-        logger.info("RELAY==NULL= " + (relay == null)+ Thread.currentThread().getStackTrace()[Thread.currentThread().getStackTrace().length-1].getMethodName());
+        logger.info("RELAY==NULL= " + (relay == null) + Thread.currentThread().getStackTrace()[Thread.currentThread().getStackTrace().length - 1].getMethodName());
 
         RelayState relayStateBefore = relay.getState();
         PinState pinStateBefore = GpioFactory.getDefaultProvider().getState(relayPin);
@@ -50,12 +50,17 @@ public class RelayOneChannelTest {
 
     @Test
     public void setState() {
-        logger.info("RELAY==NULL= " + (relay == null)+ Thread.currentThread().getStackTrace()[Thread.currentThread().getStackTrace().length-1].getMethodName());
+        logger.info("RELAY==NULL= " + (relay == null) + Thread.currentThread().getStackTrace()[Thread.currentThread().getStackTrace().length - 1].getMethodName());
 
         RelayState relayStateBefore = relay.getState();
         PinState pinStateBefore = GpioFactory.getDefaultProvider().getState(relayPin);
 
         relay.setState(RelayState.getInverseState(relayStateBefore));
+        try {
+            relay.wait(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         RelayState relayStateAfter = relay.getState();
         PinState pinStateAfter = GpioFactory.getDefaultProvider().getState(relayPin);
