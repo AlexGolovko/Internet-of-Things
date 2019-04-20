@@ -1,3 +1,4 @@
+/*
 package com.golovko.rpi.controller;
 
 import com.golovko.rpi.model.RainDetector;
@@ -86,4 +87,5 @@ public class RpiController {
         return rainDetector.getState().toString();
     }
 }
+*/
 

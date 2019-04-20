@@ -2,6 +2,7 @@ package com.golovko.rpi.controller;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -13,6 +14,7 @@ import java.nio.file.Files;
 @RestController
 public class RaspiController {
     private final String PWD = "admin";
+    ResourceLoader resourceLoader;
 
     @GetMapping(value = "/")
     public ResponseEntity<String> checkPassword(@RequestHeader String password) {
@@ -25,7 +27,8 @@ public class RaspiController {
 
     private ResponseEntity<String> getAllData() {
 
-        Resource resource = new ClassPathResource("resources/responceGetAllData.json");
+
+        Resource resource = new ClassPathResource("classpath:responceGetAllData.json");
         System.out.println("Resource =" + resource.getDescription() + "" + resource.exists());
         String responce;
         try {
@@ -34,7 +37,13 @@ public class RaspiController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return ResponseEntity.status(404).body("Fail reading data");
+        responce="{\n" +
+                "  \"Humidity\": 70.0,\n" +
+                "  \"Tempreture\": 22.0,\n" +
+                "  \"IsRelayOpen\": false,\n" +
+                "  \"IsWaterOnFlow\":false\n" +
+                "}\n";
+        return ResponseEntity.status(404).body(responce);
     }
 
 }
