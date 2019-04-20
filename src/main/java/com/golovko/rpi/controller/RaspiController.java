@@ -4,9 +4,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,7 +41,13 @@ public class RaspiController {
                 "  \"IsRelayOpen\": false,\n" +
                 "  \"IsWaterOnFlow\":false\n" +
                 "}\n";
-        return ResponseEntity.status(404).body(responce);
+        return ResponseEntity.status(201).body(responce);
+    }
+
+    @PostMapping("/setRelayState")
+    public ResponseEntity<String>setRelayState(@RequestParam String state){
+        //TODO
+        return ResponseEntity.ok().body(state+" is set");
     }
 
 }
