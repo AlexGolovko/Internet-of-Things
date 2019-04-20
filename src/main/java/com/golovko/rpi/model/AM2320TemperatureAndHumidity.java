@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -19,10 +21,12 @@ public class AM2320TemperatureAndHumidity implements Detectable {
     static String scripts = "pythonScripts.properties";
 
     static {
+
         pythonScriptsAm2320 = new Properties();
         try {
-            pythonScriptsAm2320.load(AM2320TemperatureAndHumidity.class.getResourceAsStream(scripts));
-        } catch (IOException e) {
+
+            pythonScriptsAm2320.load(Files.newInputStream(Paths.get(scripts)));
+        } catch (Exception e) {
             e.printStackTrace();
 
         }
@@ -32,6 +36,7 @@ public class AM2320TemperatureAndHumidity implements Detectable {
     public Map<String, Double> getTemperatureAndHumidity() {
         Process process;
         try {
+
             process = Runtime.getRuntime().exec(pythonScriptsAm2320.getProperty(RUN));
         } catch (IOException e) {
             e.printStackTrace();
