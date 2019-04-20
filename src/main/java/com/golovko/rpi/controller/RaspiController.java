@@ -44,10 +44,16 @@ public class RaspiController {
         return ResponseEntity.status(201).body(responce);
     }
 
-    @PostMapping("/setRelayState")
+    @GetMapping("/setRelayState")
     public ResponseEntity<String>setRelayState(@RequestParam String state){
         //TODO
         return ResponseEntity.ok().body(state+" is set");
+    }
+    @GetMapping("/report")
+    public ResponseEntity<String>getReportFromTo(@RequestParam String fromDate, @RequestParam String toDate){
+
+
+        return ResponseEntity.ok().build();
     }
 
 }
