@@ -67,8 +67,8 @@ public class AM2320TemperatureAndHumidity implements Detectable {
             e.printStackTrace();
         }
         String resultString = resultBuilder.toString();
-        System.out.println(resultString);
-        logger.info(resultString);
+        System.out.println("RESULT siot="+resultString);
+        logger.debug("RESULT String>>>>>>>>>>>>>>>>>>.'"+resultString+"'<<<<<<<<<<<<<<<<<<<<<<<<<==================");
         Double temperature = Double.valueOf(resultString.substring(0, resultString.indexOf(" ")));
         Double humidity = Double.valueOf(resultString.substring(resultString.lastIndexOf(" ", resultString.length() - 1)));
         Map<String, Double> result = new HashMap<>();
