@@ -20,6 +20,7 @@ public class AM2320TemperatureAndHumidity implements Detectable{
 
     private Process process;
     public double getHumidity() {
+
         return 0d;
     };
     public double getTemperature() {
