@@ -1,0 +1,6 @@
+{
+  "Humidity": 70.0,
+  "Tempreture": 22.0,
+  "IsRelayOpen": false,
+  "IsWaterOnFlow":false
+}
