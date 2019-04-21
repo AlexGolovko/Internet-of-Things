@@ -4,11 +4,15 @@ import com.pi4j.component.relay.RelayBase;
 import com.pi4j.component.relay.RelayState;
 import com.pi4j.io.gpio.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.Map;
+
 @Data
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class RelayOneChannel extends RelayBase {
+public class RelayOneChannel extends RelayBase implements Controllable {
     private final Pin relayPin;
     private RelayState relayState;
     private GpioPinDigitalOutput relay;
@@ -38,5 +42,15 @@ public class RelayOneChannel extends RelayBase {
     public void shutdownRelay() {
         gpioController.shutdown();
         gpioController.unprovisionPin(relay);
+    }
+
+    @Override
+    public boolean setData(State state) {
+        return false;
+    }
+
+    @Override
+    public Map<String, String> getData() {
+        return null;
     }
 }

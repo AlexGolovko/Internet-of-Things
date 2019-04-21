@@ -1,8 +1,10 @@
 package com.golovko.rpi.model;
 
-import com.google.gson.Gson;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+@Component
+@NoArgsConstructor
+@ToString
 public class AM2320TemperatureAndHumidity implements Detectable {
+
     public static final String HUMIDITY = "humidity";
     public static final String TEMPERATURE = "temperature";
     static Properties pythonScriptsAm2320;
@@ -82,7 +88,7 @@ public class AM2320TemperatureAndHumidity implements Detectable {
 
 
     @Override
-    public Gson getData() {
+    public Map<String, String> getData() {
         return null;
     }
 

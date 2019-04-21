@@ -1,14 +1,7 @@
-/*
+
 package com.golovko.rpi.controller;
 
-import com.golovko.rpi.model.RainDetector;
-import com.golovko.rpi.model.RelayTwo;
-import com.pi4j.component.relay.RelayState;
-import com.pi4j.component.relay.impl.GpioRelayComponent;
-import com.pi4j.io.gpio.*;
-import com.pi4j.io.gpio.impl.GpioPinImpl;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+/*import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -86,6 +79,5 @@ public class RpiController {
         System.err.println(rainDetector.getProperties());
         return rainDetector.getState().toString();
     }
-}
-*/
+}*/
 

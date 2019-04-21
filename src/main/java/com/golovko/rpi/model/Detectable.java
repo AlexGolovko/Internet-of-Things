@@ -1,8 +1,8 @@
 package com.golovko.rpi.model;
 
-import com.google.gson.Gson;
+import java.util.Map;
 
 public interface Detectable {
-    Gson getData();
+    Map<String,String> getData();
 
 }

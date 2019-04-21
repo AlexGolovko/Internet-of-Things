@@ -24,7 +24,7 @@ public class RelayOneChannelTest {
     public void setUp() {
         logger.setLevel(Level.INFO);
         logger.info("RELAY==NULL= " + (relay == null));
-        relay = RelayFactory.getInstanceOneChanellRelay(relayPin, "Relay", PinState.HIGH);
+        relay = RelayFactory.getInstanceOneChannelRelay(relayPin, "Relay", PinState.HIGH);
 
         assertNotNull(relay);
     }
@@ -53,7 +53,7 @@ public class RelayOneChannelTest {
         logger.info("RELAY==NULL= " + (relay == null) + Thread.currentThread().getStackTrace()[Thread.currentThread().getStackTrace().length - 1].getMethodName());
 
         RelayState relayStateBefore = relay.getState();
-        logger.info("Relay state before ==="+relayStateBefore.name());
+        logger.info("Controllable state before ==="+relayStateBefore.name());
         PinState pinStateBefore = GpioFactory.getDefaultProvider().getState(relayPin);
         synchronized (this) {
             relay.setState(RelayState.getInverseState(relayStateBefore));
@@ -64,7 +64,7 @@ public class RelayOneChannelTest {
             }
         }
         RelayState relayStateAfter = relay.getState();
-        logger.info("Relay state after ==="+relayStateAfter.name());
+        logger.info("Controllable state after ==="+relayStateAfter.name());
         PinState pinStateAfter = GpioFactory.getDefaultProvider().getState(relayPin);
         assertNotEquals(relayStateBefore, relayStateAfter);
         assertNotEquals(pinStateBefore, pinStateAfter);

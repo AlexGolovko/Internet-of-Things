@@ -6,26 +6,26 @@ import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalInput;
 import com.pi4j.io.gpio.Pin;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+@EqualsAndHashCode(callSuper = true)
 @Data
-/*@Component
-@Scope("prototype")*/
-public class RainDetector extends SensorBase {
-    ///private Sensor sensor;
+@ToString
+public class RainDetector extends SensorBase implements Detectable {
     private static GpioPinDigitalInput sensorInput;
-    //private RainDetector instance;
+    private Pin pin;
 
 
-    //    @PostConstruct
-//    public static RainDetector getInstance(Pin pin) {
-//
-//       sensorInput = GpioFactory.getInstance().provisionDigitalInputPin(pin);
-//       return new RainDetector();
-//    }
     public RainDetector(Pin pin) {
         sensorInput = GpioFactory.getInstance().provisionDigitalInputPin(pin);
-
+        this.pin = pin;
     }
+
 
     @Override
     public SensorState getState() {
@@ -33,34 +33,12 @@ public class RainDetector extends SensorBase {
     }
 
 
-    // GpioPinDigitalInput input;
-
-    /*public RainDetector(GpioPinDigitalInput pin) {
-        super(pin);
-    }*/
-
-
-    //private GpioSensorComponent gpioSensorComponent;
-
-
-
-    /*private void initField() {
-        GpioPinDigitalInput input = new GpioPinImpl(GpioFactory.getInstance(), GpioFactory.getDefaultProvider(), RaspiPin.GPIO_00);
-        //RainDetector(input);
-        //gpioSensorComponent = new GpioSensorComponent(input);
-    }*/
-
-    /*@Override
-    public SensorState getState() {
-        gpioSensorComponent.getState();
-        gpioSensorComponent.
-        *//*GpioController gpioController = GpioFactory.getInstance();
-        GpioPinDigitalInput rainDetector = gpioController.provisionDigitalInputPin(RaspiPin.GPIO_00, "No rain cover");
-        PinState state = rainDetector.getState();
-        return SensorState.valueOf(state.getName());*//*
-
-
-    }*/
-
-
+    @Override
+    public Map<String, String> getData() {
+        Map<String, String> result = new HashMap<>();
+        result.put("class", this.getClass().getName());
+        result.put("time", new Date(System.currentTimeMillis()).toString());
+        result.put("isWaterOnFlow", String.valueOf(getState().equals(SensorState.CLOSED)));
+        return result;
+    }
 }
