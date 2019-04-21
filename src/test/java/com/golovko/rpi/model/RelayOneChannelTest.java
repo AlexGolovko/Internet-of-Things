@@ -44,7 +44,7 @@ public class RelayOneChannelTest {
         assertNotEquals(relayStateBefore, relayStateAfter);
         assertNotEquals(pinStateBefore, pinStateAfter);
         relay.shutdownRelay();
-        //RaspiGpioProvider raspiGpioProvider = new RaspiGpioProvider();
+
 
     }
 
@@ -57,7 +57,7 @@ public class RelayOneChannelTest {
 
         relay.setState(RelayState.getInverseState(relayStateBefore));
         try {
-            relay.wait(2000);
+            this.wait(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
