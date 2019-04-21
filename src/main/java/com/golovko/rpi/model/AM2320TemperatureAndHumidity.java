@@ -50,7 +50,7 @@ public class AM2320TemperatureAndHumidity implements Detectable {
         }
         try {
             process.waitFor();
-            this.wait(1000);
+
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -65,7 +65,8 @@ public class AM2320TemperatureAndHumidity implements Detectable {
             }*/
             int i;
             while ((i=inputStream.read())!=-1){
-                resultBuilder.append(i);
+                resultBuilder.append((char)i);
+                logger.info("NEXT CHAR===="+(char)i);
             }
             logger.info("WHILE>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+resultBuilder.toString()+"<<<<<<<<<<<<<<<<<<<<<<<<,");
         } catch (IOException e) {
