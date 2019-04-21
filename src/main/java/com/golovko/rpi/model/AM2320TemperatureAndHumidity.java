@@ -50,6 +50,8 @@ public class AM2320TemperatureAndHumidity implements Detectable {
         }
         try {
             process.waitFor();
+            this.wait(1000);
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -57,15 +59,20 @@ public class AM2320TemperatureAndHumidity implements Detectable {
         StringBuilder resultBuilder = new StringBuilder();
         try {
             InputStream inputStream = process.getInputStream();
-            logger.info(String.valueOf(inputStream.available()));
-            for (int i = 0; i < inputStream.available(); i++) {
+            logger.info("AVAILABLE CHARS======"+inputStream.available()    );
+            /*for (int i = 0; i < inputStream.available(); i++) {
                 resultBuilder.append((char) inputStream.read());
+            }*/
+            int i;
+            while ((i=inputStream.read())!=-1){
+                resultBuilder.append(i);
             }
-
+            logger.info("WHILE>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+resultBuilder.toString()+"<<<<<<<<<<<<<<<<<<<<<<<<,");
         } catch (IOException e) {
 
             e.printStackTrace();
         }
+
         String resultString = resultBuilder.toString();
         System.out.println("RESULT siot="+resultString);
         logger.debug("RESULT String>>>>>>>>>>>>>>>>>>.'"+resultString+"'<<<<<<<<<<<<<<<<<<<<<<<<<==================");
