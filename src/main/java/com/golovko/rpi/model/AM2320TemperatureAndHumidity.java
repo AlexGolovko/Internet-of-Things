@@ -13,8 +13,8 @@ import java.util.Map;
 import java.util.Properties;
 
 public class AM2320TemperatureAndHumidity implements Detectable {
-    private final String HUMIDITY = "humidity";
-    private final String TEMPERATURE = "temperature";
+    public static final String HUMIDITY = "humidity";
+    public static final String TEMPERATURE = "temperature";
     static Properties pythonScriptsAm2320;
     private final String RUN = "run";
     private final Logger logger = LoggerFactory.getLogger(AM2320TemperatureAndHumidity.class);

@@ -2,15 +2,19 @@ package com.golovko.rpi.model;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Map;
 
+import static com.golovko.rpi.model.AM2320TemperatureAndHumidity.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class AM2320Test {
-    AM2320TemperatureAndHumidity am2320;
+    private final Logger logger = LoggerFactory.getLogger(AM2320Test.class);
+    private AM2320TemperatureAndHumidity am2320;
 
     @Before
     public void setUp() {
@@ -26,8 +30,10 @@ public class AM2320Test {
             e.printStackTrace();
         }
         assertNotNull(temperatureAndHumidity);
-        assertTrue(temperatureAndHumidity.get("temperature") > 0);
-        assertTrue(temperatureAndHumidity.get("humidity") > 0);
+        assertTrue(temperatureAndHumidity.get(TEMPERATURE) > 0);
+        assertTrue(temperatureAndHumidity.get(HUMIDITY) > 0);
+        logger.info(TEMPERATURE + "=" + temperatureAndHumidity.get(TEMPERATURE)
+                + HUMIDITY + "=" + temperatureAndHumidity.get(HUMIDITY));
     }
 
     @Test

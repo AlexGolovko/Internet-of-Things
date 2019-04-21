@@ -1,7 +1,9 @@
 package com.golovko.rpi.controller;
 
-public class LocalController {
+import org.springframework.stereotype.Service;
 
+@Service
+public class LocalController {
 
 
 }
