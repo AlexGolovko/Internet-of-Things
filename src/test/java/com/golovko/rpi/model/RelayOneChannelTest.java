@@ -53,19 +53,28 @@ public class RelayOneChannelTest {
         logger.info("RELAY==NULL= " + (relay == null) + Thread.currentThread().getStackTrace()[Thread.currentThread().getStackTrace().length - 1].getMethodName());
 
         RelayState relayStateBefore = relay.getState();
+        logger.info("Relay state before ==="+relayStateBefore.name());
         PinState pinStateBefore = GpioFactory.getDefaultProvider().getState(relayPin);
         synchronized (this) {
             relay.setState(RelayState.getInverseState(relayStateBefore));
             try {
-                this.wait(2000);
+                this.wait(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
         RelayState relayStateAfter = relay.getState();
+        logger.info("Relay state after ==="+relayStateAfter.name());
         PinState pinStateAfter = GpioFactory.getDefaultProvider().getState(relayPin);
         assertNotEquals(relayStateBefore, relayStateAfter);
         assertNotEquals(pinStateBefore, pinStateAfter);
+        synchronized (this){
+            try {
+                this.wait(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         relay.shutdownRelay();
     }
 }
