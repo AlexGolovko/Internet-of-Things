@@ -15,7 +15,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @ToString
 public class RelayOneChannel extends RelayBase implements Controllable {
-    private final String isRelayOpen = "IsRelayOpen";
+
     private final Pin relayPin;
     private RelayState relayState;
     private GpioPinDigitalOutput relay;
@@ -32,7 +32,7 @@ public class RelayOneChannel extends RelayBase implements Controllable {
 
     @Override
     public RelayState getState() {
-        relayState = relay.getState() == PinState.HIGH ? RelayState.CLOSED : RelayState.OPEN;
+        relayState = relay.getState() == PinState.LOW ? RelayState.CLOSED : RelayState.OPEN;
         return relayState;
     }
 
@@ -57,7 +57,7 @@ public class RelayOneChannel extends RelayBase implements Controllable {
         RelayState state = getState();
         Map<String, String> result = new HashMap<>();
         result.put("time", new Date(System.currentTimeMillis()).toString());
-        result.put(isRelayOpen, getState().name());
+        result.put("relayState", getState().name());
         return result;
     }
 }

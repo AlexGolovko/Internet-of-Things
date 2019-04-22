@@ -86,7 +86,6 @@ public class RaspiController {
     @GetMapping("/report")
     public ResponseEntity<String> getReportFromTo(@RequestParam String fromDate, @RequestParam String toDate) {
 
-
         return ResponseEntity.ok().build();
     }
 

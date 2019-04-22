@@ -36,7 +36,7 @@ public class RainDetector extends SensorBase implements Detectable {
     public Map<String, String> getData() {
         Map<String, String> result = new HashMap<>();
 
-        result.put("isWaterOnFlow", String.valueOf(getState().equals(SensorState.CLOSED)));
+        result.put("isWaterOnFlow", String.valueOf(getState().equals(SensorState.OPEN)));
         return result;
     }
 }

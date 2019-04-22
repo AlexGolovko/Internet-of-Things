@@ -63,9 +63,14 @@ public class AM2320TemperatureAndHumidity implements Detectable {
             resultBuilder.append((char) i);
         }
         inputStream.close();
-
-        Double temperature = Double.valueOf(resultBuilder.substring(0, resultBuilder.indexOf(" ")));
-        Double humidity = Double.valueOf(resultBuilder.substring(resultBuilder.lastIndexOf(" ")));
+        Double temperature = null;
+        Double humidity = null;
+        try {
+            temperature = Double.valueOf(resultBuilder.substring(0, resultBuilder.indexOf(" ")));
+            humidity = Double.valueOf(resultBuilder.substring(resultBuilder.lastIndexOf(" ")));
+        } catch (StringIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
         Map<String, Double> result = new HashMap<>();
         result.put(TEMPERATURE, temperature);
         result.put(HUMIDITY, humidity);
