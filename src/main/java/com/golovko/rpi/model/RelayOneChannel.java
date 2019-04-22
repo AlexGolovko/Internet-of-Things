@@ -7,12 +7,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString
 public class RelayOneChannel extends RelayBase implements Controllable {
+    private final String isRelayOpen = "IsRelayOpen";
     private final Pin relayPin;
     private RelayState relayState;
     private GpioPinDigitalOutput relay;
@@ -51,6 +54,11 @@ public class RelayOneChannel extends RelayBase implements Controllable {
 
     @Override
     public Map<String, String> getData() {
-        return null;
+        RelayState state = getState();
+        Map<String, String> result = new HashMap<>();
+        result.put("class", this.getClass().getName());
+        result.put("time", new Date(System.currentTimeMillis()).toString());
+        result.put(isRelayOpen, getState().name());
+        return result;
     }
 }

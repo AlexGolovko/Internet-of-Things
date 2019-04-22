@@ -1,5 +1,6 @@
 package com.golovko.rpi.model;
 
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.slf4j.Logger;
@@ -10,11 +11,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 @Component
+@Data
 @NoArgsConstructor
 @ToString
 public class AM2320TemperatureAndHumidity implements Detectable {
@@ -89,7 +89,22 @@ public class AM2320TemperatureAndHumidity implements Detectable {
 
     @Override
     public Map<String, String> getData() {
-        return null;
+
+        Map<String, Double> temperatureAndHumidity = null;
+        try {
+            temperatureAndHumidity = getTemperatureAndHumidity();
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error(new Date(System.currentTimeMillis()).toString() + this.toString());
+            return Collections.emptyMap();
+        }
+        Map<String, String> result = new HashMap<>(2);
+        temperatureAndHumidity.entrySet()
+                .iterator()
+                .forEachRemaining(entry -> result.put(entry.getKey(), entry.getValue().toString()));
+        result.put("class", this.getClass().getName());
+        result.put("time", new Date(System.currentTimeMillis()).toString());
+        return result;
     }
 
 

@@ -1,7 +1,15 @@
 package com.golovko.rpi.controller;
 
+import com.golovko.rpi.model.AM2320TemperatureAndHumidity;
+import com.golovko.rpi.model.RainDetector;
+import com.golovko.rpi.model.RelayFactory;
+import com.golovko.rpi.model.RelayOneChannel;
+import com.google.gson.Gson;
+import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiPin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -13,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestController
 public class RaspiController {
@@ -20,25 +30,28 @@ public class RaspiController {
     private final String PWD = "admin";
     ResourceLoader resourceLoader;
 
-    /*private final RainDetector rainDetector;
-    private final RelayOneChannel relayOneChannel;
+    private final RainDetector rainDetector=new RainDetector(RaspiPin.GPIO_00);
+    private final RelayOneChannel relayOneChannel= RelayFactory.getInstanceOneChannelRelay(RaspiPin.GPIO_01,"Relay", PinState.HIGH);
+    @Autowired
     private final AM2320TemperatureAndHumidity am2320;
 
 
-    public RaspiController(RainDetector rainDetector, RelayOneChannel relayOneChannel, AM2320TemperatureAndHumidity am2320) {
+   /* public RaspiController(RainDetector rainDetector, RelayOneChannel relayOneChannel, AM2320TemperatureAndHumidity am2320) {
         this.relayOneChannel = relayOneChannel;
         this.am2320 = am2320;
         this.rainDetector=rainDetector;
 
     }*/
 
-    public RaspiController() {
+
+    public RaspiController(AM2320TemperatureAndHumidity am2320) {
+        this.am2320 = am2320;
     }
 
 
     @GetMapping(value = "/")
     public ResponseEntity<String> checkPassword(@RequestHeader String password) {
-       // logger.info(rainDetector.toString()+am2320.toString()+relayOneChannel.toString());
+       logger.info(rainDetector.toString()+am2320.toString()+relayOneChannel.toString());
         if (PWD.equals(password))
             return getAllData();
         return ResponseEntity.status(404).body("Incorrect password");
@@ -63,6 +76,14 @@ public class RaspiController {
                 "  \"IsRelayOpen\": false,\n" +
                 "  \"IsWaterOnFlow\":false\n" +
                 "}\n";
+        //
+        Map<String, String> dateFromAllSensors =new LinkedHashMap();
+              dateFromAllSensors.putAll(rainDetector.getData());
+              dateFromAllSensors.putAll(am2320.getData());
+              dateFromAllSensors.putAll(relayOneChannel.getData());
+        String result = new Gson().toJson(dateFromAllSensors);
+        responce += "\nFROM Sensors\n" + result;
+        //
         return ResponseEntity.status(201).body(responce);
     }
 

@@ -42,3 +42,4 @@ public class RainDetector extends SensorBase implements Detectable {
         return result;
     }
 }
+
