@@ -98,11 +98,10 @@ public class AM2320TemperatureAndHumidity implements Detectable {
             logger.error(new Date(System.currentTimeMillis()).toString() + this.toString());
             return Collections.emptyMap();
         }
-        Map<String, String> result = new HashMap<>(2);
+        Map<String, String> result = new HashMap<>();
         temperatureAndHumidity.entrySet()
                 .iterator()
                 .forEachRemaining(entry -> result.put(entry.getKey(), entry.getValue().toString()));
-        result.put("class", this.getClass().getName());
         result.put("time", new Date(System.currentTimeMillis()).toString());
         return result;
     }

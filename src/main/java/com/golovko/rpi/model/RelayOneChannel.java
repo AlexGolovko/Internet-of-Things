@@ -56,7 +56,6 @@ public class RelayOneChannel extends RelayBase implements Controllable {
     public Map<String, String> getData() {
         RelayState state = getState();
         Map<String, String> result = new HashMap<>();
-        result.put("class", this.getClass().getName());
         result.put("time", new Date(System.currentTimeMillis()).toString());
         result.put(isRelayOpen, getState().name());
         return result;

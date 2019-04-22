@@ -5,33 +5,30 @@ import com.golovko.rpi.model.RainDetector;
 import com.golovko.rpi.model.RelayFactory;
 import com.golovko.rpi.model.RelayOneChannel;
 import com.google.gson.Gson;
+import com.pi4j.component.relay.RelayState;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
 public class RaspiController {
-    private final Logger logger= LoggerFactory.getLogger(RaspiController.class);
+    private final Logger logger = LoggerFactory.getLogger(RaspiController.class);
     private final String PWD = "admin";
     ResourceLoader resourceLoader;
 
-    private final RainDetector rainDetector=new RainDetector(RaspiPin.GPIO_00);
-    private final RelayOneChannel relayOneChannel= RelayFactory.getInstanceOneChannelRelay(RaspiPin.GPIO_01,"Relay", PinState.HIGH);
+    private final RainDetector rainDetector = new RainDetector(RaspiPin.GPIO_00);
+    private final RelayOneChannel relayOneChannel = RelayFactory.getInstanceOneChannelRelay(RaspiPin.GPIO_01, "Relay", PinState.HIGH);
     @Autowired
     private final AM2320TemperatureAndHumidity am2320;
 
@@ -50,8 +47,8 @@ public class RaspiController {
 
 
     @GetMapping(value = "/")
-    public ResponseEntity<String> checkPassword(@RequestHeader String password) {
-       logger.info(rainDetector.toString()+am2320.toString()+relayOneChannel.toString());
+    public ResponseEntity<String> checkPasswordAndGetAllData(@RequestHeader String password) {
+        logger.info(rainDetector.toString() + am2320.toString() + relayOneChannel.toString());
         if (PWD.equals(password))
             return getAllData();
         return ResponseEntity.status(404).body("Incorrect password");
@@ -60,40 +57,34 @@ public class RaspiController {
 
     private ResponseEntity<String> getAllData() {
 
+        Map<String, String> dateFromAllSensors = rainDetector.getData();
+        dateFromAllSensors.putAll(rainDetector.getData());
+        dateFromAllSensors.putAll(am2320.getData());
+        dateFromAllSensors.putAll(relayOneChannel.getData());
+        dateFromAllSensors.remove("class");
+        String result = new Gson().toJson(dateFromAllSensors, Map.class);
 
-        Resource resource = new ClassPathResource("classpath:responceGetAllData.json");
-        System.out.println("Resource =" + resource.getDescription() + "" + resource.exists());
-        String responce;
-        try {
-            responce = new String(Files.readAllBytes(resource.getFile().toPath()));
-            return ResponseEntity.ok().body(responce);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        responce="{\n" +
-                "  \"Humidity\": 70.0,\n" +
-                "  \"Tempreture\": 22.0,\n" +
-                "  \"IsRelayOpen\": false,\n" +
-                "  \"IsWaterOnFlow\":false\n" +
-                "}\n";
         //
-        Map<String, String> dateFromAllSensors =new LinkedHashMap();
-              dateFromAllSensors.putAll(rainDetector.getData());
-              dateFromAllSensors.putAll(am2320.getData());
-              dateFromAllSensors.putAll(relayOneChannel.getData());
-        String result = new Gson().toJson(dateFromAllSensors);
-        responce += "\nFROM Sensors\n" + result;
-        //
-        return ResponseEntity.status(201).body(responce);
+        return ResponseEntity.status(201).body(result);
     }
 
     @GetMapping("/setRelayState")
-    public ResponseEntity<String>setRelayState(@RequestParam String state){
-        //TODO
-        return ResponseEntity.ok().body(state+" is set");
+    public ResponseEntity<String> setRelayState(@RequestParam String state) {
+
+        if (state != null && state.toUpperCase().equals(RelayState.OPEN.toString())) {
+            relayOneChannel.setRelayState(RelayState.OPEN);
+            return ResponseEntity.ok().body(state + " is set");
+        }
+        if (state != null && state.toUpperCase().equals(RelayState.CLOSED.name())) {
+            relayOneChannel.setRelayState(RelayState.CLOSED);
+            return ResponseEntity.ok().body(state + " is set");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                body(state + " is set");
     }
+
     @GetMapping("/report")
-    public ResponseEntity<String>getReportFromTo(@RequestParam String fromDate, @RequestParam String toDate){
+    public ResponseEntity<String> getReportFromTo(@RequestParam String fromDate, @RequestParam String toDate) {
 
 
         return ResponseEntity.ok().build();

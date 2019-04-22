@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,8 +35,7 @@ public class RainDetector extends SensorBase implements Detectable {
     @Override
     public Map<String, String> getData() {
         Map<String, String> result = new HashMap<>();
-        result.put("class", this.getClass().getName());
-        result.put("time", new Date(System.currentTimeMillis()).toString());
+
         result.put("isWaterOnFlow", String.valueOf(getState().equals(SensorState.CLOSED)));
         return result;
     }
