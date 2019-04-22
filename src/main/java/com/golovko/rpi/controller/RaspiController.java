@@ -1,8 +1,5 @@
 package com.golovko.rpi.controller;
 
-import com.golovko.rpi.model.AM2320TemperatureAndHumidity;
-import com.golovko.rpi.model.RainDetector;
-import com.golovko.rpi.model.RelayOneChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -23,7 +20,7 @@ public class RaspiController {
     private final String PWD = "admin";
     ResourceLoader resourceLoader;
 
-    private final RainDetector rainDetector;
+    /*private final RainDetector rainDetector;
     private final RelayOneChannel relayOneChannel;
     private final AM2320TemperatureAndHumidity am2320;
 
@@ -33,12 +30,15 @@ public class RaspiController {
         this.am2320 = am2320;
         this.rainDetector=rainDetector;
 
+    }*/
+
+    public RaspiController() {
     }
 
 
     @GetMapping(value = "/")
     public ResponseEntity<String> checkPassword(@RequestHeader String password) {
-        logger.info(rainDetector.toString()+am2320.toString()+relayOneChannel.toString());
+       // logger.info(rainDetector.toString()+am2320.toString()+relayOneChannel.toString());
         if (PWD.equals(password))
             return getAllData();
         return ResponseEntity.status(404).body("Incorrect password");
