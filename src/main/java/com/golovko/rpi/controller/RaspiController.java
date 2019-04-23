@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -48,9 +45,15 @@ public class RaspiController {
 
     @GetMapping(value = "/")
     public ResponseEntity<String> checkPasswordAndGetAllData(@RequestHeader String password) {
-        logger.trace(rainDetector.toString() + am2320.toString() + relayOneChannel.toString());
-        if (PWD.equals(password))
-            return getAllData();
+        long startTime = System.currentTimeMillis();
+        if (PWD.equals(password)) {
+            ResponseEntity<String> allData = getAllData();
+            long finishTime = System.currentTimeMillis();
+
+            logger.info(this.getClass().toString()+"==="+(finishTime-startTime)+"ms OK");
+            return allData;
+        }
+        logger.info(this.getClass().getName()+"==="+(System.currentTimeMillis()-startTime)+"ms BAD");
         return ResponseEntity.status(404).body("Incorrect password");
     }
 
