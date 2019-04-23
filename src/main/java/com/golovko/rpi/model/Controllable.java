@@ -1,5 +1,7 @@
 package com.golovko.rpi.model;
 
+import java.util.Map;
+
 public interface Controllable extends Detectable {
-    boolean setData(State state);
+    boolean setData(Map<String,String> data);
 }

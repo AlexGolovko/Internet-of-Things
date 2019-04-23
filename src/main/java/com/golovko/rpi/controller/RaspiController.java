@@ -8,6 +8,8 @@ import com.google.gson.Gson;
 import com.pi4j.component.relay.RelayState;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+
 
 @RestController
 public class RaspiController {
@@ -50,22 +53,37 @@ public class RaspiController {
             ResponseEntity<String> allData = getAllData();
             long finishTime = System.currentTimeMillis();
 
-            logger.info(this.getClass().toString()+"==="+(finishTime-startTime)+"ms OK");
+
+            logger.info(this.getClass().toString() + "===" + (finishTime - startTime) + "ms OK");
             return allData;
         }
-        logger.info(this.getClass().getName()+"==="+(System.currentTimeMillis()-startTime)+"ms BAD");
+        logger.info(this.getClass().getName() + "===" + (System.currentTimeMillis() - startTime) + "ms BAD");
         return ResponseEntity.status(404).body("Incorrect password");
+    }
+
+    @GetMapping(value = "/json")
+    @ResponseStatus(HttpStatus.OK)
+    public JSONObject getAllDataToClient() {
+        ResponseEntity<String> allData = getAllData();
+
+        JSONObject jsonObject =null;
+        try {
+            jsonObject = new JSONObject(allData.getBody());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
     }
 
 
     private ResponseEntity<String> getAllData() {
 
-        Map<String, String> dateFromAllSensors = rainDetector.getData();
-        dateFromAllSensors.putAll(rainDetector.getData());
-        dateFromAllSensors.putAll(am2320.getData());
-        dateFromAllSensors.putAll(relayOneChannel.getData());
-        dateFromAllSensors.remove("class");
-        String result = new Gson().toJson(dateFromAllSensors, Map.class);
+        Map<String, String> dataFromAllSensors = rainDetector.getData();
+        dataFromAllSensors.putAll(rainDetector.getData());
+        dataFromAllSensors.putAll(am2320.getData());
+        dataFromAllSensors.putAll(relayOneChannel.getData());
+        dataFromAllSensors.remove("class");
+        String result = new Gson().toJson(dataFromAllSensors, Map.class);
         logger.trace(result);
 
         return ResponseEntity.ok().body(result);
