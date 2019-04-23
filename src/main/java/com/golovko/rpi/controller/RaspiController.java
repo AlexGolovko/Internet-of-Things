@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import com.pi4j.component.relay.RelayState;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,14 +63,15 @@ public class RaspiController {
     @GetMapping(value = "/json")
     @ResponseStatus(HttpStatus.OK)
     public JSONObject getAllDataToClient() {
-        ResponseEntity<String> allData = getAllData();
+        Map<String, String> dataFromAllSensors = rainDetector.getData();
+        dataFromAllSensors.putAll(rainDetector.getData());
+        dataFromAllSensors.putAll(am2320.getData());
+        dataFromAllSensors.putAll(relayOneChannel.getData());
+        dataFromAllSensors.remove("class");
+        JSONObject jsonObject = null;
 
-        JSONObject jsonObject =null;
-        try {
-            jsonObject = new JSONObject(allData.getBody());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        jsonObject = new JSONObject(dataFromAllSensors);
+
         return jsonObject;
     }
 
