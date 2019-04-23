@@ -3,8 +3,8 @@
 package com.golovko.rpi.controller;
 
 import com.golovko.rpi.model.RainDetector;
-import com.golovko.rpi.model.RelayFactory;
-import com.golovko.rpi.model.RelayOneChannel;
+import com.golovko.rpi.model.Relays.RelayFactory;
+import com.golovko.rpi.model.Relays.RelayOneChannel;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 import org.springframework.context.annotation.Bean;

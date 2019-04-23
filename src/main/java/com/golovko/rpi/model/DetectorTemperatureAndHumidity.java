@@ -17,19 +17,18 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 @ToString
-public class AM2320TemperatureAndHumidity implements Detectable {
+public class DetectorTemperatureAndHumidity implements Detectable {
 
     public static final String HUMIDITY = "humidity";
     public static final String TEMPERATURE = "temperature";
-    static Properties pythonScriptsAm2320;
+    private static Properties pythonScriptsAm2320;
     private final String RUN = "run";
-    private final Logger logger = LoggerFactory.getLogger(AM2320TemperatureAndHumidity.class);
+    private final Logger logger = LoggerFactory.getLogger(DetectorTemperatureAndHumidity.class);
 
     //TODO make Singelton
     static String scripts = "pythonScripts.properties";
 
     static {
-
         pythonScriptsAm2320 = new Properties();
         try {
 

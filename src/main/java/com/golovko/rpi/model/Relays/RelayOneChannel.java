@@ -1,5 +1,7 @@
-package com.golovko.rpi.model;
+package com.golovko.rpi.model.Relays;
 
+import com.golovko.rpi.model.Controllable;
+import com.golovko.rpi.model.State;
 import com.pi4j.component.relay.RelayBase;
 import com.pi4j.component.relay.RelayState;
 import com.pi4j.io.gpio.*;

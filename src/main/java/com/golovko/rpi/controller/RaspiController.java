@@ -1,9 +1,9 @@
 package com.golovko.rpi.controller;
 
-import com.golovko.rpi.model.AM2320TemperatureAndHumidity;
+import com.golovko.rpi.model.DetectorTemperatureAndHumidity;
 import com.golovko.rpi.model.RainDetector;
-import com.golovko.rpi.model.RelayFactory;
-import com.golovko.rpi.model.RelayOneChannel;
+import com.golovko.rpi.model.Relays.RelayFactory;
+import com.golovko.rpi.model.Relays.RelayOneChannel;
 import com.google.gson.Gson;
 import com.pi4j.component.relay.RelayState;
 import com.pi4j.io.gpio.PinState;
@@ -30,7 +30,7 @@ public class RaspiController {
     private final RainDetector rainDetector = new RainDetector(RaspiPin.GPIO_00);
     private final RelayOneChannel relayOneChannel = RelayFactory.getInstanceOneChannelRelay(RaspiPin.GPIO_01, "Relay", PinState.HIGH);
     @Autowired
-    private final AM2320TemperatureAndHumidity am2320;
+    private final DetectorTemperatureAndHumidity am2320;
 
 
    /* public RaspiController(RainDetector rainDetector, RelayOneChannel relayOneChannel, AM2320TemperatureAndHumidity am2320) {
@@ -41,14 +41,14 @@ public class RaspiController {
     }*/
 
 
-    public RaspiController(AM2320TemperatureAndHumidity am2320) {
+    public RaspiController(DetectorTemperatureAndHumidity am2320) {
         this.am2320 = am2320;
     }
 
 
     @GetMapping(value = "/")
     public ResponseEntity<String> checkPasswordAndGetAllData(@RequestHeader String password) {
-        logger.info(rainDetector.toString() + am2320.toString() + relayOneChannel.toString());
+        logger.trace(rainDetector.toString() + am2320.toString() + relayOneChannel.toString());
         if (PWD.equals(password))
             return getAllData();
         return ResponseEntity.status(404).body("Incorrect password");
@@ -63,9 +63,9 @@ public class RaspiController {
         dateFromAllSensors.putAll(relayOneChannel.getData());
         dateFromAllSensors.remove("class");
         String result = new Gson().toJson(dateFromAllSensors, Map.class);
+        logger.trace(result);
 
-        //
-        return ResponseEntity.status(201).body(result);
+        return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/setRelayState")

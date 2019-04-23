@@ -8,17 +8,17 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.golovko.rpi.model.AM2320TemperatureAndHumidity.*;
+import static com.golovko.rpi.model.DetectorTemperatureAndHumidity.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class AM2320Test {
     private final Logger logger = LoggerFactory.getLogger(AM2320Test.class);
-    private AM2320TemperatureAndHumidity am2320;
+    private DetectorTemperatureAndHumidity am2320;
 
     @Before
     public void setUp() {
-        am2320 = new AM2320TemperatureAndHumidity();
+        am2320 = new DetectorTemperatureAndHumidity();
     }
 
     @Test

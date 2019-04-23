@@ -1,5 +1,7 @@
 package com.golovko.rpi.model;
 
+import com.golovko.rpi.model.Relays.RelayFactory;
+import com.golovko.rpi.model.Relays.RelayOneChannel;
 import com.pi4j.component.relay.RelayState;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.Pin;
