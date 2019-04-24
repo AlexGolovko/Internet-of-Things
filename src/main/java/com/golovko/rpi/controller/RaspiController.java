@@ -56,12 +56,12 @@ public class RaspiController {
 
 
             logger.info(this.getClass().toString() + "===" + (finishTime - startTime) + "ms OK");
-            return allData;
+
+            return ResponseEntity.ok().contentType(new MediaType("application/json")).body(allData.getBody());
         }
         logger.info(this.getClass().getName() + "===" + (System.currentTimeMillis() - startTime) + "ms BAD");
         return ResponseEntity
                 .status(404)
-                .contentType(new MediaType("application/json"))
                 .body("Incorrect password");
     }
 
