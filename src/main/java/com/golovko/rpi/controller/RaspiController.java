@@ -57,7 +57,7 @@ public class RaspiController {
 
             logger.info(this.getClass().toString() + "===" + (finishTime - startTime) + "ms OK");
 
-            return ResponseEntity.ok().contentType(new MediaType("application/json")).body(allData.getBody());
+            return ResponseEntity.ok().contentType(new MediaType("application","json")).body(allData.getBody());
         }
         logger.info(this.getClass().getName() + "===" + (System.currentTimeMillis() - startTime) + "ms BAD");
         return ResponseEntity
