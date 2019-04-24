@@ -46,7 +46,7 @@ public class RaspiController {
     }
 
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "/",produces = "application/json")
     public ResponseEntity<String> checkPasswordAndGetAllData(@RequestHeader String password) {
         long startTime = System.currentTimeMillis();
         if (PWD.equals(password)) {
@@ -63,22 +63,23 @@ public class RaspiController {
                 .body("Incorrect password");
     }
 
-    @GetMapping(value = "/json")
-    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/json", produces = "application/json")
     public ResponseEntity<JSONObject> getAllDataToClient() {
         Map<String, String> dataFromAllSensors = rainDetector.getData();
         dataFromAllSensors.putAll(rainDetector.getData());
         dataFromAllSensors.putAll(am2320.getData());
         dataFromAllSensors.putAll(relayOneChannel.getData());
         dataFromAllSensors.remove("class");
-        JSONObject jsonObject = null;
+
         String s = new Gson().toJson(dataFromAllSensors);
         JSONObject result = null;
+
         try {
             result = new JSONObject(s);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         return ResponseEntity.ok().body(result);
     }
 
