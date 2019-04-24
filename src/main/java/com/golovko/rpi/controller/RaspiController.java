@@ -57,22 +57,21 @@ public class RaspiController {
             return allData;
         }
         logger.info(this.getClass().getName() + "===" + (System.currentTimeMillis() - startTime) + "ms BAD");
-        return ResponseEntity.status(404).body("Incorrect password");
+        return ResponseEntity
+                .status(404)
+                .body("Incorrect password");
     }
 
     @GetMapping(value = "/json")
     @ResponseStatus(HttpStatus.OK)
-    public JSONObject getAllDataToClient() {
+    public ResponseEntity<JSONObject> getAllDataToClient() {
         Map<String, String> dataFromAllSensors = rainDetector.getData();
         dataFromAllSensors.putAll(rainDetector.getData());
         dataFromAllSensors.putAll(am2320.getData());
         dataFromAllSensors.putAll(relayOneChannel.getData());
         dataFromAllSensors.remove("class");
         JSONObject jsonObject = null;
-
-        jsonObject = new JSONObject(dataFromAllSensors);
-
-        return jsonObject;
+        return ResponseEntity.ok().body(new JSONObject(dataFromAllSensors));
     }
 
 
