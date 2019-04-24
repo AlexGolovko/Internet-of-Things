@@ -105,7 +105,7 @@ public class DetectorTemperatureAndHumidity implements Detectable {
         Map<String, String> result = new HashMap<>();
         temperatureAndHumidity.entrySet()
                 .iterator()
-                .forEachRemaining(entry -> result.put(entry.getKey(), entry.getValue().toString()));
+                .forEachRemaining(entry -> result.put(entry.getKey(),entry!=null?entry.getValue().toString():null));
         result.put("time", new Date(System.currentTimeMillis()).toString());
         return result;
     }
