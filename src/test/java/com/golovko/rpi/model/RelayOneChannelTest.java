@@ -60,7 +60,7 @@ public class RelayOneChannelTest {
         synchronized (this) {
             relay.setState(RelayState.getInverseState(relayStateBefore));
             try {
-                this.wait(5000);
+                this.wait(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -72,7 +72,7 @@ public class RelayOneChannelTest {
         assertNotEquals(pinStateBefore, pinStateAfter);
         synchronized (this){
             try {
-                this.wait(5000);
+                this.wait(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

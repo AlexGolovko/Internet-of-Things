@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +47,7 @@ public class RaspiController {
     }
 
 
-    @GetMapping(value = "/",produces = "application/json")
+    @GetMapping(value = "/")
     public ResponseEntity<String> checkPasswordAndGetAllData(@RequestHeader String password) {
         long startTime = System.currentTimeMillis();
         if (PWD.equals(password)) {
@@ -60,10 +61,11 @@ public class RaspiController {
         logger.info(this.getClass().getName() + "===" + (System.currentTimeMillis() - startTime) + "ms BAD");
         return ResponseEntity
                 .status(404)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body("Incorrect password");
     }
 
-    @GetMapping(value = "/json", produces = "application/json")
+    @GetMapping(value = "/json")
     public ResponseEntity<JSONObject> getAllDataToClient() {
         Map<String, String> dataFromAllSensors = rainDetector.getData();
         dataFromAllSensors.putAll(rainDetector.getData());
@@ -80,7 +82,7 @@ public class RaspiController {
             e.printStackTrace();
         }
 
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(result);
     }
 
 
