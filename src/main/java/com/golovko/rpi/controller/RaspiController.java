@@ -47,7 +47,7 @@ public class RaspiController {
     }
 
 
-    @GetMapping(value = "/",produces ={MediaType.APPLICATION_JSON_VALUE} )
+    @GetMapping(value = "/")
     public ResponseEntity<String> checkPasswordAndGetAllData(@RequestHeader String password) {
         long startTime = System.currentTimeMillis();
         if (PWD.equals(password)) {
@@ -60,8 +60,8 @@ public class RaspiController {
         }
         logger.info(this.getClass().getName() + "===" + (System.currentTimeMillis() - startTime) + "ms BAD");
         return ResponseEntity
-                .status(404).header("content-type","application/json")
-                .contentType(MediaType.APPLICATION_JSON)
+                .status(404)
+                .contentType(new MediaType("application/json"))
                 .body("Incorrect password");
     }
 
