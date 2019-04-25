@@ -52,20 +52,22 @@ public class RelayOneChannel extends RelayBase implements Controllable {
     @Override
     public boolean setData(Map<String, String> data) {
 
-        if (data.get("state") != null) {
+        if (data.containsKey("state")) {
             String stateLine = data.get("state");
-            State state;
-            try {
-                state = State.valueOf(stateLine.toUpperCase());
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
+            if (stateLine != null) {
+                try {
+                    State state = State.valueOf(stateLine.toUpperCase());
+                    this.setState(state.getRelayState(state));
+                    return true;
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
             }
-            this.setState(state.getRelayState(state));
-            return true;
         }
         return false;
+
     }
 
     @Override
