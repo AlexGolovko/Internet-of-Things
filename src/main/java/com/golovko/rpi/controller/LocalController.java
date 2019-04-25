@@ -12,6 +12,7 @@ public class LocalController implements Runnable {
 
     @Override
    public void run() {
+        //TODO
         logger.info("Run method");
         Date date= new Date();
         while (true) {
