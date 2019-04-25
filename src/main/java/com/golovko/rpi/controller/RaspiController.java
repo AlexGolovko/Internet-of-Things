@@ -13,11 +13,13 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
@@ -26,21 +28,10 @@ import java.util.Map;
 public class RaspiController {
     private final Logger logger = LoggerFactory.getLogger(RaspiController.class);
     private final String PWD = "admin";
-    ResourceLoader resourceLoader;
-
     private final RainDetector rainDetector = new RainDetector(RaspiPin.GPIO_00);
     private final RelayOneChannel relayOneChannel = RelayFactory.getInstanceOneChannelRelay(RaspiPin.GPIO_01, "Relay", PinState.HIGH);
     @Autowired
     private final DetectorTemperatureAndHumidity am2320;
-
-
-   /* public RaspiController(RainDetector rainDetector, RelayOneChannel relayOneChannel, AM2320TemperatureAndHumidity am2320) {
-        this.relayOneChannel = relayOneChannel;
-        this.am2320 = am2320;
-        this.rainDetector=rainDetector;
-
-    }*/
-
 
     public RaspiController(DetectorTemperatureAndHumidity am2320) {
         this.am2320 = am2320;
@@ -51,18 +42,22 @@ public class RaspiController {
     public ResponseEntity<String> checkPasswordAndGetAllData(@RequestHeader String password) {
         long startTime = System.currentTimeMillis();
         if (PWD.equals(password)) {
-            ResponseEntity<String> allData = getAllData();
+            Map<String, String> allDataFromSensors = prepareAllDataFromSensors();
             long finishTime = System.currentTimeMillis();
 
 
             logger.info(this.getClass().toString() + "===" + (finishTime - startTime) + "ms OK");
 
-            return ResponseEntity.ok().contentType(new MediaType("application","json")).body(allData.getBody());
+
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(new Gson().toJson(allDataFromSensors));
         }
         logger.info(this.getClass().getName() + "===" + (System.currentTimeMillis() - startTime) + "ms BAD");
         return ResponseEntity
                 .status(404)
-                .body("Incorrect password");
+                .build();
     }
 
     @GetMapping(value = "/json")
@@ -86,17 +81,16 @@ public class RaspiController {
     }
 
 
-    private ResponseEntity<String> getAllData() {
+    private Map<String, String> prepareAllDataFromSensors() {
 
         Map<String, String> dataFromAllSensors = rainDetector.getData();
         dataFromAllSensors.putAll(rainDetector.getData());
         dataFromAllSensors.putAll(am2320.getData());
         dataFromAllSensors.putAll(relayOneChannel.getData());
         dataFromAllSensors.remove("class");
-        String result = new Gson().toJson(dataFromAllSensors, Map.class);
-        logger.trace(result);
 
-        return ResponseEntity.ok().body(result);
+
+        return dataFromAllSensors;
     }
 
     @GetMapping("/setRelayState")

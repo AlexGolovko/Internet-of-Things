@@ -1,6 +1,7 @@
 package com.golovko.rpi.model.Relays;
 
 import com.golovko.rpi.model.Controllable;
+import com.golovko.rpi.model.State;
 import com.pi4j.component.relay.RelayBase;
 import com.pi4j.component.relay.RelayState;
 import com.pi4j.io.gpio.*;
@@ -49,8 +50,22 @@ public class RelayOneChannel extends RelayBase implements Controllable {
     }
 
     @Override
-    public boolean setData(Map<String,String>data) {
-return false;
+    public boolean setData(Map<String, String> data) {
+
+        if (data.get("state") != null) {
+            String stateLine = data.get("state");
+            State state;
+            try {
+                state = State.valueOf(stateLine.toUpperCase());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+
+            }
+            this.setState(state.getRelayState(state));
+            return true;
+        }
+        return false;
     }
 
     @Override

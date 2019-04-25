@@ -11,7 +11,7 @@ public class LocalController implements Runnable {
     private final Logger logger = LoggerFactory.getLogger(LocalController.class);
 
     @Override
-    public void run() {
+   public void run() {
         logger.info("Run method");
         Date date= new Date();
         while (true) {
