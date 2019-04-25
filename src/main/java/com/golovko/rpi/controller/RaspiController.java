@@ -7,12 +7,9 @@ import com.golovko.rpi.model.Relays.RelayOneChannel;
 import com.google.gson.Gson;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,11 +41,7 @@ public class RaspiController {
         if (PWD.equals(password)) {
             Map<String, String> allDataFromSensors = prepareAllDataFromSensors();
             long finishTime = System.currentTimeMillis();
-
-
-            logger.info(this.getClass().toString() + "===" + (finishTime - startTime) + "ms OK");
-
-
+            logger.info("checkPasswordAndGetAllData() =" + (finishTime - startTime) + "ms OK");
             return ResponseEntity
                     .ok()
                     .contentType(MediaType.APPLICATION_JSON)
@@ -60,28 +53,10 @@ public class RaspiController {
                 .build();
     }
 
-    @GetMapping(value = "/json")
-    public ResponseEntity<JSONObject> getAllDataToClient() {
-        Map<String, String> dataFromAllSensors = rainDetector.getData();
-        dataFromAllSensors.putAll(rainDetector.getData());
-        dataFromAllSensors.putAll(am2320.getData());
-        dataFromAllSensors.putAll(relayOneChannel.getData());
-        dataFromAllSensors.remove("class");
-
-        String s = new Gson().toJson(dataFromAllSensors);
-        JSONObject result = null;
-
-        try {
-            result = new JSONObject(s);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(result);
-    }
 
 
     private Map<String, String> prepareAllDataFromSensors() {
+        long startTime = System.currentTimeMillis();
 
         Map<String, String> dataFromAllSensors = rainDetector.getData();
         dataFromAllSensors.putAll(rainDetector.getData());
@@ -94,12 +69,14 @@ public class RaspiController {
     }
 
     @GetMapping("/setRelayState")
-    public ResponseEntity<String> setRelayState(@RequestParam String state) {
+    public ResponseEntity setRelayState(@RequestParam String state) {
+        long startTime = System.currentTimeMillis();
 
         if (state != null) {
             relayOneChannel.setData((Map<String, String>) new HashMap<>().put("state", state));
-            return ResponseEntity.status(HttpStatus.OK).
-                    body(state + " is set");
+            long finishTime = System.currentTimeMillis();
+            logger.info("setRelayState() =" + (finishTime - startTime) + "ms OK");
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
        /* if (state != null && state.toUpperCase().equals(RelayState.OPEN.toString())) {
@@ -116,8 +93,9 @@ public class RaspiController {
 
     @GetMapping("/report")
     public ResponseEntity<String> getReportFromTo(@RequestParam String fromDate, @RequestParam String toDate) {
-
-        return ResponseEntity.ok().build();
+        long startTime = System.currentTimeMillis();
+        //TODO NOT SUPPORTED YET
+        return ResponseEntity.ok().body("NOT SUPPORTED YET");
     }
 
 }
