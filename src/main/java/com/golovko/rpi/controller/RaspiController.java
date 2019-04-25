@@ -5,7 +5,6 @@ import com.golovko.rpi.model.RainDetector;
 import com.golovko.rpi.model.Relays.RelayFactory;
 import com.golovko.rpi.model.Relays.RelayOneChannel;
 import com.google.gson.Gson;
-import com.pi4j.component.relay.RelayState;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 import org.json.JSONException;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -96,7 +96,13 @@ public class RaspiController {
     @GetMapping("/setRelayState")
     public ResponseEntity<String> setRelayState(@RequestParam String state) {
 
-        if (state != null && state.toUpperCase().equals(RelayState.OPEN.toString())) {
+        if (state != null) {
+            relayOneChannel.setData((Map<String, String>) new HashMap<>().put("state", state));
+            return ResponseEntity.status(HttpStatus.OK).
+                    body(state + " is set");
+        }
+        return ResponseEntity.badRequest().build();
+       /* if (state != null && state.toUpperCase().equals(RelayState.OPEN.toString())) {
             relayOneChannel.setRelayState(RelayState.OPEN);
             return ResponseEntity.ok().body(state + " is set");
         }
@@ -104,8 +110,8 @@ public class RaspiController {
             relayOneChannel.setRelayState(RelayState.CLOSED);
             return ResponseEntity.ok().body(state + " is set");
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                body(state + " is set");
+
+        */
     }
 
     @GetMapping("/report")
