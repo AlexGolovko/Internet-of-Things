@@ -68,6 +68,7 @@ public class RaspiController {
 
     @GetMapping("/setRelayState")
     public ResponseEntity setRelayState(@RequestParam String state) {
+        logger.info("setRelayState() start state=="+state);
         long startTime = System.currentTimeMillis();
 
         if (state != null) {
