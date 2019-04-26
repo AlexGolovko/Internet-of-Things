@@ -54,9 +54,7 @@ public class RaspiController {
     }
 
 
-
     private Map<String, String> prepareAllDataFromSensors() {
-        long startTime = System.currentTimeMillis();
 
         Map<String, String> dataFromAllSensors = rainDetector.getData();
         dataFromAllSensors.putAll(rainDetector.getData());
@@ -73,10 +71,13 @@ public class RaspiController {
         long startTime = System.currentTimeMillis();
 
         if (state != null) {
-            relayOneChannel.setData((Map<String, String>) new HashMap<>().put("state", state));
+
+            boolean isSetState = relayOneChannel.setData((Map<String, String>) new HashMap<>().put("state", state));
             long finishTime = System.currentTimeMillis();
             logger.info("setRelayState() =" + (finishTime - startTime) + "ms OK");
-            return ResponseEntity.ok().build();
+            if (isSetState) {
+                return ResponseEntity.ok().build();
+            } else return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.badRequest().build();
        /* if (state != null && state.toUpperCase().equals(RelayState.OPEN.toString())) {
