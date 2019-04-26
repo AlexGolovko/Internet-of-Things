@@ -68,12 +68,14 @@ public class RaspiController {
 
     @GetMapping("/setRelayState")
     public ResponseEntity setRelayState(@RequestParam String state) {
-        logger.info("setRelayState() start state=="+state);
+        logger.info("setRelayState() start state==" + state);
         long startTime = System.currentTimeMillis();
 
         if (state != null) {
 
-            boolean isSetState = relayOneChannel.setData((Map<String, String>) new HashMap<>().put("state", state));
+            Map<String, String> requestData = new HashMap<>();
+            requestData.put("state", state);
+            boolean isSetState = relayOneChannel.setData(requestData);
             long finishTime = System.currentTimeMillis();
             logger.info("setRelayState() =" + (finishTime - startTime) + "ms OK");
             if (isSetState) {
